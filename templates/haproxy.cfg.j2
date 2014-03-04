@@ -61,11 +61,22 @@ defaults
 # main frontend which proxys to the backends
 #---------------------------------------------------------------------
 frontend  main *:80
-    default_backend      app
+    {% for backend in app.haproxy.backends %}
+        {% for acl in backend.acls %}
+        acl is_{{backend.title}} {{acl}}
+        {% endfor %}
+        use_backend {{backend.title}} if is_{{backend.title}}
+
+    {% endfor %}
+    default_backend      {{app.haproxy.default}}
 
 #---------------------------------------------------------------------
 # round robin balancing between the various backends
 #---------------------------------------------------------------------
-backend app
-    balance     roundrobin
-    server  player 192.168.2.11:80 check
+{% for backend in app.haproxy.backends %}
+backend {{backend.title}}
+    {%for server in backend.servers %}
+    server {{server.title}} {{server.address}} check
+    {% endfor %}
+
+{% endfor %}
