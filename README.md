@@ -18,28 +18,26 @@ use_backend static if is_static
 
 ```
 
-app:
+haproxy:
+    default: toronto
+    backends:
 
-    haproxy:
-        default: toronto
-        backends:
+    - title: atlanta
+      acls:
+        - hdr_dom(host) -i blog.website.url
+      servers:
+        - title: web-1
+          address: 172.17.0.3:80
+        - title: web-2
+          address: 172.17.0.4:80
 
-        - title: atlanta
-          acls:
-            - hdr_dom(host) -i blog.website.url
-          servers:
-            - title: web-1
-              address: 172.17.0.3:80
-            - title: web-2
-              address: 172.17.0.4:80
-
-        - title: toronto
-          acls:
-            - path_beg -i /static /images /javascript /stylesheets
-          servers:
-            - title: cdn-holy
-              address: 172.17.0.6:80
-            - title: cdn-guacamole
-              address: 172.17.0.9:80
+    - title: toronto
+      acls:
+        - path_beg -i /static /images /javascript /stylesheets
+      servers:
+        - title: cdn-holy
+          address: 172.17.0.6:80
+        - title: cdn-guacamole
+          address: 172.17.0.9:80
 
 ```
