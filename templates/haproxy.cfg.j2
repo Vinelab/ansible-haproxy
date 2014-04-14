@@ -61,19 +61,19 @@ defaults
 # main frontend which proxys to the backends
 #---------------------------------------------------------------------
 frontend  main *:80
-    {% for backend in app.haproxy.backends %}
+    {% for backend in haproxy.backends %}
         {% for acl in backend.acls %}
         acl is_{{backend.title}} {{acl}}
         {% endfor %}
         use_backend {{backend.title}} if is_{{backend.title}}
 
     {% endfor %}
-    default_backend      {{app.haproxy.default}}
+    default_backend      {{haproxy.default}}
 
 #---------------------------------------------------------------------
 # round robin balancing between the various backends
 #---------------------------------------------------------------------
-{% for backend in app.haproxy.backends %}
+{% for backend in haproxy.backends %}
 backend {{backend.title}}
     {%for server in backend.servers %}
     server {{server.title}} {{server.address}} check
