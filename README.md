@@ -3,7 +3,16 @@ Install HAProxy on Centos/Red Hat with Ansible
 
 ## Installation
 - Clone this repository inside your ```roles``` direcotry
-or add as submodule: `git submodule add git@github.com:Vinelab/ansible-haproxy roles/haproxy`
+
+```bash
+git clone https://github.com/Vinelab/ansible-haproxy.git roles/haproxy
+```
+
+or add as submodule: 
+
+```bash
+git submodule add git@github.com:Vinelab/ansible-haproxy roles/haproxy
+```
 
 - In your playbook:
 
